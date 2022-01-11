@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        name="viewport">
+  <style>
+  span.example-title{text-transform:none}
+  :is(aside,div).example,div.illegal-example{padding:.5em;margin:1em 0;position:relative;clear:both}
+  div.illegal-example{color:red}
+  div.illegal-example p{color:#000}
+  :is(aside,div).example{border-left-width:.5em;border-left-style:solid;border-color:#e0cb52;background:#fcfaee}
+  aside.example div.example{border-left-width:.1em;border-color:#999;background:#fff}
+  .example pre{background-color:rgba(0,0,0,.03)}
+  </style>
+  <style>
+  .issue-label{text-transform:initial}
+  .warning>p:first-child{margin-top:0}
+  .warning{padding:.5em;border-left-width:.5em;border-left-style:solid}
+  span.warning{padding:.1em .5em .15em}
+  .issue.closed span.issue-number{text-decoration:line-through}
+  .warning{border-color:#f11;border-width:.2em;border-style:solid;background:#fbe9e9}
+  .warning-title:before{content:"⚠";font-size:1.3em;float:left;padding-right:.3em;margin-top:-.3em}
+  li.task-list-item{list-style:none}
+  input.task-list-item-checkbox{margin:0 .35em .25em -1.6em;vertical-align:middle}
+  .issue a.respec-gh-label{padding:5px;margin:0 2px 0 2px;font-size:10px;text-transform:none;text-decoration:none;font-weight:700;border-radius:4px;position:relative;bottom:2px;border:none;display:inline-block}
+  </style>
+  <style>
+  dfn{cursor:pointer}
+  .dfn-panel{position:absolute;z-index:35;min-width:300px;max-width:500px;padding:.5em .75em;margin-top:.6em;font:small Helvetica Neue,sans-serif,Droid Sans Fallback;background:#fff;color:#000;box-shadow:0 1em 3em -.4em rgba(0,0,0,.3),0 0 1px 1px rgba(0,0,0,.05);border-radius:2px}
+  .dfn-panel:not(.docked)>.caret{position:absolute;top:-9px}
+  .dfn-panel:not(.docked)>.caret::after,.dfn-panel:not(.docked)>.caret::before{content:"";position:absolute;border:10px solid transparent;border-top:0;border-bottom:10px solid #fff;top:0}
+  .dfn-panel:not(.docked)>.caret::before{border-bottom:9px solid #a2a9b1}
+  .dfn-panel *{margin:0}
+  .dfn-panel b{display:block;color:#000;margin-top:.25em}
+  .dfn-panel ul a[href]{color:#333}
+  .dfn-panel>div{display:flex}
+  .dfn-panel a.self-link{font-weight:700;margin-right:auto}
+  .dfn-panel .marker{padding:.1em;margin-left:.5em;border-radius:.2em;text-align:center;white-space:nowrap;font-size:90%;color:#040b1c}
+  .dfn-panel .marker.dfn-exported{background:#d1edfd;box-shadow:0 0 0 .125em #1ca5f940}
+  .dfn-panel .marker.idl-block{background:#8ccbf2;box-shadow:0 0 0 .125em #0670b161}
+  .dfn-panel a:not(:hover){text-decoration:none!important;border-bottom:none!important}
+  .dfn-panel a[href]:hover{border-bottom-width:1px}
+  .dfn-panel ul{padding:0}
+  .dfn-panel li{margin-left:1em}
+  .dfn-panel.docked{position:fixed;left:.5em;top:unset;bottom:2em;margin:0 auto;max-width:calc(100vw - .75em * 2 - .5em - .2em * 2);max-height:30vh;overflow:auto}
+  </style>
+  <link class="removeOnSave"
+        crossorigin="anonymous"
+        href="https://www.w3.org"
+        rel="preconnect">
+  <link as="script"
+        class="removeOnSave"
+        href="https://www.w3.org/scripts/TR/2021/fixup.js"
+        rel="preload">
+  <link as="style"
+        class="removeOnSave"
+        href="https://www.w3.org/StyleSheets/TR/2021/base.css"
+        rel="preload">
+  <link as="image"
+        class="removeOnSave"
+        href="https://www.w3.org/StyleSheets/TR/2021/logos/W3C"
+        rel="preload">
+  <link class="removeOnSave"
+        href="https://www.w3.org/StyleSheets/TR/2021/base.css"
+        rel="stylesheet">
+  <title>Pronunciation Gap Analysis &amp; Use Cases</title>
+  <meta charset="utf-8">
+  <style class="removeOnSave"
+         id="respec-ui-styles">
+  .respec-modal .close-button{position:absolute;z-index:inherit;padding:.2em;font-weight:700;cursor:pointer;margin-left:5px;border:none;background:0 0}
+  #respec-ui{position:fixed;display:flex;flex-direction:row-reverse;top:20px;right:20px;width:202px;text-align:right;z-index:9000}
+  #respec-pill,.respec-info-button{background:#fff;height:2.5em;color:#787878;border:1px solid #ccc;box-shadow:1px 1px 8px 0 rgba(100,100,100,.5)}
+  .respec-info-button{border:none;opacity:.75;border-radius:2em;margin-right:1em;min-width:3.5em}
+  .respec-info-button:focus,.respec-info-button:hover{opacity:1;transition:opacity .2s}
+  #respec-pill:disabled{font-size:2.8px;text-indent:-9999em;border-top:1.1em solid rgba(40,40,40,.2);border-right:1.1em solid rgba(40,40,40,.2);border-bottom:1.1em solid rgba(40,40,40,.2);border-left:1.1em solid #fff;transform:translateZ(0);animation:respec-spin .5s infinite linear;box-shadow:none}
+  #respec-pill:disabled,#respec-pill:disabled:after{border-radius:50%;width:10em;height:10em}
+  @keyframes respec-spin{
+  0%{transform:rotate(0)}
+  100%{transform:rotate(360deg)}
+  }
+  .respec-hidden{visibility:hidden;opacity:0;transition:visibility 0s .2s,opacity .2s linear}
+  .respec-visible{visibility:visible;opacity:1;transition:opacity .2s linear}
+  #respec-pill:focus,#respec-pill:hover{color:#000;background-color:#f5f5f5;transition:color .2s}
+  #respec-menu{position:absolute;margin:0;padding:0;font-family:sans-serif;background:#fff;box-shadow:1px 1px 8px 0 rgba(100,100,100,.5);width:200px;display:none;text-align:left;margin-top:32px;font-size:.8em}
+  #respec-menu:not([hidden]){display:block}
+  #respec-menu li{list-style-type:none;margin:0;padding:0}
+  .respec-save-buttons{display:grid;grid-template-columns:repeat(auto-fill,minmax(47%,2fr));grid-gap:.5cm;padding:.5cm}
+  .respec-save-button:link{padding-top:16px;color:#f0f0f0;background:#2a5aa8;justify-self:stretch;height:1cm;text-decoration:none;text-align:center;font-size:inherit;border:none;border-radius:.2cm}
+  .respec-save-button:link:hover{color:#fff;background:#2a5aa8;padding:0;margin:0;border:0;padding-top:16px}
+  .respec-save-button:link:focus{background:#193766}
+  #respec-pill:focus,#respec-ui button:focus,.respec-option:focus{outline:0;outline-style:none}
+  #respec-pill-error{background-color:red;color:#fff}
+  #respec-pill-warning{background-color:orange;color:#fff}
+  .respec-error-list,.respec-warning-list{margin:0;padding:0;list-style:none;font-family:sans-serif;background-color:#fffbe6;font-size:.85em}
+  .respec-error-list>li,.respec-warning-list>li{padding:.4em .7em}
+  .respec-warning-list>li::before{content:"⚠️";padding-right:.5em}
+  .respec-error-list p,.respec-warning-list p{padding:0;margin:0}
+  .respec-warning-list li{color:#5c3b00;border-bottom:thin solid #fff5c2}
+  .respec-error-list,.respec-error-list li{background-color:#fff0f0}
+  .respec-error-list li::before{content:"💥";padding-right:.5em}
+  .respec-error-list li{padding:.4em .7em;color:#5c3b00;border-bottom:thin solid #ffd7d7}
+  .respec-error-list li>p{margin:0;padding:0;display:inline-block}
+  .respec-error-list li>p:first-child,.respec-warning-list li>p:first-child{display:inline}
+  .respec-error-list>li li,.respec-warning-list>li li{margin:0;list-style:disc}
+  #respec-overlay{display:block;position:fixed;z-index:10000;top:0;left:0;height:100%;width:100%;background:#000}
+  .respec-show-overlay{transition:opacity .2s linear;opacity:.5}
+  .respec-hide-overlay{transition:opacity .2s linear;opacity:0}
+  .respec-modal{display:block;position:fixed;z-index:11000;margin:auto;top:10%;background:#fff;border:5px solid #666;min-width:20%;width:79%;padding:0;max-height:80%;overflow-y:auto;margin:0 -.5cm}
+  @media screen and (min-width:78em){
+  .respec-modal{width:62%}
+  }
+  .respec-modal h3{margin:0;padding:.2em;text-align:center;color:#000;background:linear-gradient(to bottom,#eee 0,#eee 50%,#ccc 100%);font-size:1em}
+  .respec-modal .inside div p{padding-left:1cm}
+  #respec-menu button.respec-option{background:#fff;padding:0 .2cm;border:none;width:100%;text-align:left;font-size:inherit;padding:1.2em 1.2em}
+  #respec-menu button.respec-option:hover,#respec-menu button:focus{background-color:#eee}
+  .respec-cmd-icon{padding-right:.5em}
+  #respec-ui button.respec-option:last-child{border:none;border-radius:inherit}
+  .respec-button-copy-paste{position:absolute;height:28px;width:40px;cursor:pointer;background-image:linear-gradient(#fcfcfc,#eee);border:1px solid #90b8de;border-left:0;border-radius:0 0 3px 0;-webkit-user-select:none;user-select:none;-webkit-appearance:none;top:0;left:127px}
+  @media print{
+  #respec-ui{display:none}
+  }
+  .respec-iframe{width:100%;min-height:550px;height:100%;overflow:hidden;padding:0;margin:0;border:0}
+  .respec-iframe:not(.ready){background:url(https://respec.org/xref/loader.gif) no-repeat center}
+  .respec-iframe+a[href]{font-size:.9rem;float:right;margin:0 .5em .5em;border-bottom-width:1px}
+  </style>
+  <style id="respec-mainstyle">
+  @keyframes pop{
+  0%{transform:scale(1,1)}
+  25%{transform:scale(1.25,1.25);opacity:.75}
+  100%{transform:scale(1,1)}
+  }
+  :is(h1,h2,h3,h4,h5,h6,a) abbr{border:none}
+  dfn{font-weight:700}
+  a.internalDFN{color:inherit;border-bottom:1px solid #99c;text-decoration:none}
+  a.externalDFN{color:inherit;border-bottom:1px dotted #ccc;text-decoration:none}
+  a.bibref{text-decoration:none}
+  .respec-offending-element:target{animation:pop .25s ease-in-out 0s 1}
+  .respec-offending-element,a[href].respec-offending-element{text-decoration:red wavy underline}
+  @supports not (text-decoration:red wavy underline){
+  .respec-offending-element:not(pre){display:inline-block}
+  .respec-offending-element{background:url(data:image/gif;base64,R0lGODdhBAADAPEAANv///8AAP///wAAACwAAAAABAADAEACBZQjmIAFADs=) bottom repeat-x}
+  }
+  #references :target{background:#eaf3ff;animation:pop .4s ease-in-out 0s 1}
+  cite .bibref{font-style:normal}
+  code{color:#c63501}
+  th code{color:inherit}
+  a[href].orcid{padding-left:4px;padding-right:4px}
+  a[href].orcid>svg{margin-bottom:-2px}
+  .toc a,.tof a{text-decoration:none}
+  a .figno,a .secno{color:#000}
+  ol.tof,ul.tof{list-style:none outside none}
+  .caption{margin-top:.5em;font-style:italic}
+  table.simple{border-spacing:0;border-collapse:collapse;border-bottom:3px solid #005a9c}
+  .simple th{background:#005a9c;color:#fff;padding:3px 5px;text-align:left}
+  .simple th a{color:#fff;padding:3px 5px;text-align:left}
+  .simple th[scope=row]{background:inherit;color:inherit;border-top:1px solid #ddd}
+  .simple td{padding:3px 10px;border-top:1px solid #ddd}
+  .simple tr:nth-child(even){background:#f0f6ff}
+  .section dd>p:first-child{margin-top:0}
+  .section dd>p:last-child{margin-bottom:0}
+  .section dd{margin-bottom:1em}
+  .section dl.attrs dd,.section dl.eldef dd{margin-bottom:0}
+  #issue-summary>ul{column-count:2}
+  #issue-summary li{list-style:none;display:inline-block}
+  details.respec-tests-details{margin-left:1em;display:inline-block;vertical-align:top}
+  details.respec-tests-details>*{padding-right:2em}
+  details.respec-tests-details[open]{z-index:999999;position:absolute;border:thin solid #cad3e2;border-radius:.3em;background-color:#fff;padding-bottom:.5em}
+  details.respec-tests-details[open]>summary{border-bottom:thin solid #cad3e2;padding-left:1em;margin-bottom:1em;line-height:2em}
+  details.respec-tests-details>ul{width:100%;margin-top:-.3em}
+  details.respec-tests-details>li{padding-left:1em}
+  a[href].self-link:hover{opacity:1;text-decoration:none;background-color:transparent}
+  h2,h3,h4,h5,h6{position:relative}
+  aside.example .marker>a.self-link{color:inherit}
+  :is(h2,h3,h4,h5,h6)>a.self-link{border:none;color:inherit;font-size:83%;height:2em;left:-1.6em;opacity:.5;position:absolute;text-align:center;text-decoration:none;top:0;transition:opacity .2s;width:2em}
+  :is(h2,h3,h4,h5,h6)>a.self-link::before{content:"§";display:block}
+  @media (max-width:767px){
+  dd{margin-left:0}
+  :is(h2,h3,h4,h5,h6)>a.self-link{left:auto;top:auto}
+  }
+  @media print{
+  .removeOnSave{display:none}
+  }
+  </style>
+  <link class="removeOnSave"
+        crossorigin="anonymous"
+        href="https://api.specref.org"
+        rel="dns-prefetch">
+  <link class="removeOnSave"
+        crossorigin="anonymous"
+        href="https://respec.org"
+        rel="preconnect">
+  <link as="script"
+        class="removeOnSave"
+        href="https://www.w3.org/Tools/respec/respec-highlight"
+        rel="preload">
+  <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED"
+        rel="stylesheet">
+  <meta content=
+  "The objective of the Pronunciation Task Force is to develop normative specifications and best practices guidance collaborating with other W3C groups as appropriate, to provide for proper pronunciation in HTML content when using text to speech (TTS) synthesis. This document presents the results of the Pronunciation Task Force work on an HTML standard. It includes an introduction with a historical perspective, an enumeration of the core requirements, a listing of approach use cases, and finally a gap analysis. Gaps are defined when a requirement does not have a corresponding use case approach by which it can be authored in HTML."
+        name="description">
+  <style>
+  .hljs{display:block;overflow-x:auto;padding:.5em;color:#383a42;background:#fafafa}
+  .hljs-comment,.hljs-quote{color:#717277;font-style:italic}
+  .hljs-doctag,.hljs-formula,.hljs-keyword{color:#a626a4}
+  .hljs-deletion,.hljs-name,.hljs-section,.hljs-selector-tag,.hljs-subst{color:#ca4706;font-weight:700}
+  .hljs-literal{color:#0b76c5}
+  .hljs-addition,.hljs-attribute,.hljs-meta-string,.hljs-regexp,.hljs-string{color:#42803c}
+  .hljs-built_in,.hljs-class .hljs-title{color:#9a6a01}
+  .hljs-attr,.hljs-number,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-pseudo,.hljs-template-variable,.hljs-type,.hljs-variable{color:#986801}
+  .hljs-bullet,.hljs-link,.hljs-meta,.hljs-selector-id,.hljs-symbol,.hljs-title{color:#336ae3}
+  .hljs-emphasis{font-style:italic}
+  .hljs-strong{font-weight:700}
+  .hljs-link{text-decoration:underline}
+  </style>
+  <style class="removeOnSave">
+  var:hover{text-decoration:underline;cursor:pointer}
+  var.respec-hl{color:var(--color,#000);background-color:var(--bg-color);box-shadow:0 0 0 2px var(--bg-color)}
+  var.respec-hl-c1{--bg-color:#f4d200}
+  var.respec-hl-c2{--bg-color:#ff87a2}
+  var.respec-hl-c3{--bg-color:#96e885}
+  var.respec-hl-c4{--bg-color:#3eeed2}
+  var.respec-hl-c5{--bg-color:#eacfb6}
+  var.respec-hl-c6{--bg-color:#82ddff}
+  var.respec-hl-c7{--bg-color:#ffbcf2}
+  @media print{
+  var.respec-hl{background:0 0;color:#000;box-shadow:unset}
+  }
+  </style>
+  <style>
+  var{position:relative;cursor:pointer}
+  var[data-type]::after,var[data-type]::before{position:absolute;left:50%;top:-6px;opacity:0;transition:opacity .4s;pointer-events:none}
+  var[data-type]::before{content:"";transform:translateX(-50%);border-width:4px 6px 0 6px;border-style:solid;border-color:transparent;border-top-color:#000}
+  var[data-type]::after{content:attr(data-type);transform:translateX(-50%) translateY(-100%);background:#000;text-align:center;font-family:"Dank Mono","Fira Code",monospace;font-style:normal;padding:6px;border-radius:3px;color:#daca88;text-indent:0;font-weight:400}
+  var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
+  </style>
+  <meta class="removeOnSave"
+        content="$respec.org"
+        name="monetization">
+  <script id="initialUserConfig"
+        type="application/json">
+  {
+  "trace": true,
+  "doRDFa": "1.0",
+  "includePermalinks": true,
+  "permalinkEdge": true,
+  "permalinkHide": false,
+  "tocIntroductory": true,
+  "specStatus": "ED",
+  "noRecTrack": true,
+  "shortName": "pronunciation-gap-analysis-and-use-cases",
+  "copyrightStart": "2020",
+  "edDraftURI": "https://w3c.github.io/pronunciation/gap-analysis_and_use-case",
+  "editors": [
+    {
+      "name": "Markku Hakkinen",
+      "url": "mailto:mhakkinen@ets.org",
+      "mailto": "mhakkinen@ets.org",
+      "company": "Educational Testing Service",
+      "companyURI": "https://www.ets.org/",
+      "w3cid": 35712
+    },
+    {
+      "name": "Steve Noble",
+      "url": "mailto:steve.noble@pearson.com",
+      "mailto": "steve.noble@pearson.com",
+      "company": "Pearson",
+      "companyURI": "https://www.pearson.com/",
+      "w3cid": 98332
+    },
+    {
+      "name": "Dee Dyer",
+      "mailto": "ddyer@ets.org",
+      "company": "Educational Testing Service",
+      "companyURI": "https://www.ets.org/",
+      "w3cid": 0,
+      "url": "mailto:ddyer@ets.org"
+    },
+    {
+      "name": "Irfan Ali",
+      "url": "mailto:iali@ets.org",
+      "mailto": "iali@ets.org",
+      "company": "Educational Testing Service",
+      "companyURI": "https://www.ets.org/",
+      "w3cid": 98332
+    },
+    {
+      "name": "Paul Grenier",
+      "mailto": "pgrenier@gmail.com",
+      "url": "mailto:pgrenier@gmail.com"
+    },
+    {
+      "name": "Roy Ran",
+      "url": "mailto:ran@w3.org",
+      "mailto": "ran@w3.org",
+      "company": "W3C",
+      "companyURI": "http://www.w3.org",
+      "w3cid": 100586
+    }
+  ],
+  "group": 83907,
+  "publishISODate": "2021-10-13T00:00:00.000Z",
+  "generatedSubtitle": "Editor's Draft 13 October 2021"
+  }
+  </script>
+</head>
+<body>
+  <section id="gap-analysis">
+    <!--OddPage-->
+    <h2 id="x4-gap-analysis"></h2>
+    <bdi class="secno">
+      4.<!---0.802764%-->
+    </bdi>Gap Analysis<a aria-label="Permalink for Section 4."
+             class="self-link"
+             href="#gap-analysis"></a>
+    <p>Based on the features and use cases described in the prior sections, the following table presents existing speech presentation standards, HTML features, and WAI-ARIA attributes that may offer a method to achieve the requirement for HTML
+    authors. A blank cell for any approach represents a gap in support.</p>
+    <table border="1"
+           cellpadding="2"
+           cellspacing="2"
+           width="100%">
+      <tbody>
+        <tr>
+          <th align="left"
+              valign="top">Requirement<br></th>
+          <th valign="top">aria-pronounce<br></th>
+          <th valign="top">HTML<br></th>
+          <th valign="top">WAI-ARIA<br></th>
+          <th valign="top">PLS<br></th>
+          <th valign="top">CSS Speech<br></th>
+          <th valign="top">SSML<br></th>
+        </tr>
+        <tr>
+          <th align="left"
+              valign="top">Language<br></th>
+          <td align="center"
+              valign="top">unknown<br></td>
+          <td align="center"
+              valign="top">Yes<br></td>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top">Yes<br></td>
+        </tr>
+        <tr>
+          <th align="left"
+              valign="top">Voice Family/Gender<br></th>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top">Yes<br></td>
+          <td align="center"
+              valign="top">Yes<br></td>
+        </tr>
+        <tr>
+          <th align="left"
+              valign="top">Phonetic Pronunciation<br></th>
+          <td align="center"
+              valign="top">Yes<br></td>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top">Yes<br></td>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top">Yes<br></td>
+        </tr>
+        <tr>
+          <th align="left"
+              valign="top">Substitution<br></th>
+          <td align="center"
+              valign="top">unknown<br></td>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top">Partial<br></td>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top">Yes<br></td>
+        </tr>
+        <tr>
+          <th align="left"
+              valign="top">Rate/Pitch/Volume<br></th>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top">Yes<br></td>
+          <td align="center"
+              valign="top">Yes<br></td>
+        </tr>
+        <tr>
+          <th align="left"
+              valign="top">Emphasis<br></th>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top">Yes<br></td>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top">Yes<br></td>
+          <td align="center"
+              valign="top">Yes<br></td>
+        </tr>
+        <tr>
+          <th align="left"
+              valign="top">Say As<br></th>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top">Yes<br></td>
+        </tr>
+        <tr>
+          <th align="left"
+              valign="top">Pausing<br></th>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top"><br></td>
+          <td align="center"
+              valign="top">Yes<br></td>
+          <td align="center"
+              valign="top">Yes<br></td>
+        </tr>
+      </tbody>
+    </table>
+    <p>The following sections describe how each of the required features may be met by the use of existing approaches. A key consideration in the analysis is whether a means exists to directly author (or annotate) HTML content to incorporate the
+    spoken presentation and pronunciation feature.</p>
+    <section id="language-0">
+      <h3 id="x4-1-language"></h3>
+      <bdi class="secno">
+        4.1<!---0.802764%-->
+      </bdi>Language<a aria-label="Permalink for Section 4.1"
+               class="self-link"
+               href="#language-0"></a>
+      <p>Allow content authors to specify the language of text contained within an element so that the TTS used for rendering will select the appropriate language for synthesis.<br></p>
+      <h4 id="html">HTML<a aria-label="Permalink for Section"
+         class="self-link"
+         href="#language-0"></a></h4>
+      <p><code>lang</code> attribute can be applied at the document level or to individual elements. (WCAG) (AT Supported: some)<br></p>
+      <h4 id="ssml">SSML<a aria-label="Permalink for Section"
+         class="self-link"
+         href="#language-0"></a></h4>
+      <p>Example: <code>&lt;speak&gt; In Paris, they pronounce it &lt;lang xml:lang="fr-FR"&gt;Paris&lt;/lang&gt; &lt;/speak&gt;</code>code&gt;</p>
+    </section>
+    <section id="voice-family-gender-0">
+      <h3 id="x4-2-voice-family-gender"></h3>
+      <bdi class="secno">
+        4.2<!---0.802764%-->
+      </bdi>Voice Family/Gender<a aria-label="Permalink for Section 4.2"
+               class="self-link"
+               href="#voice-family-gender-0"></a>
+      <p>Allow content authors to specify a specific TTS voice to be used to render text. For example, for content that presents a dialog between two people, a woman and a man, the author may specify that a female voice be used for the woman's text
+      and a male voice be used for the man's text. Some platform TTS services may support a variety of voices, identified by a name, gender, or even age.</p>
+      <h4 id="css">CSS<a aria-label="Permalink for Section"
+         class="self-link"
+         href="#voice-family-gender-0"></a></h4>
+      <p><code>voice-family</code> property can be used to specify the gender of the voice.<br></p>
+      <p>Example: <code>{ voice-family: male; }</code></p>
+      <h4 id="ssml-0">SSML<a aria-label="Permalink for Section"
+         class="self-link"
+         href="#voice-family-gender-0"></a></h4>
+      <p>Using the <code>&lt;voice&gt;</code> element, the gender of the speaker, if supported by the TTS engine, can be specified.</p>
+      <p>Example: <code>&lt;voice gender="female" &gt;Mary had a little lamb,&lt;/voice&gt;</code></p>
+    </section>
+    <section id="phonetic-pronunciation">
+      <h3 id="x4-3-phonetic-pronunciation"></h3>
+      <bdi class="secno">
+        4.3<!---0.802764%-->
+      </bdi>Phonetic Pronunciation<a aria-label="Permalink for Section 4.3"
+               class="self-link"
+               href="#phonetic-pronunciation"></a>
+      <p>Allow content authors to precisely specify the phonetic pronunciation of a word or phrase.</p>
+      <h4 id="pls">PLS<a aria-label="Permalink for Section"
+         class="self-link"
+         href="#phonetic-pronunciation"></a></h4>
+      <p>Using PLS, all the pronunciations can be factored out into an external PLS document which is referenced by the <code>&lt;lexicon&gt;</code> element of SSML</p>
+      <div class="example"
+           id="example-13">
+        <div class="marker">
+          <a class="self-link"
+               href="#example-13">Example<!---0.802764%-->
+          <bdi>
+            13<!---0.802764%-->
+          </bdi></a><!---0.802764%-->
+        </div><!---0.802764%-->
+        <pre class="">Example: <code aria-busy="false"
+     class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">speak</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">lexicon</span> <span class="hljs-attr">uri</span>=<span class=
+     "hljs-string">"http://www.example.com/movie_lexicon.pls"</span>/&gt;</span>
+                The title of the movie is: "La vita è bella" (Life is beautiful),
+    which is directed by Roberto Benigni.<span class="hljs-tag">&lt;/<span class="hljs-name">speak</span>&gt;</span></code></pre><!---0.802764%-->
+      </div>
+      <h4 id="ssml-1">SSML<a aria-label="Permalink for Section"
+         class="self-link"
+         href="#phonetic-pronunciation"></a></h4>
+      <p>The following is a simple example of an SSML document. It includes an Italian movie title and the name of the director to be read in US English.</p>
+      <div class="example"
+           id="example-14">
+        <div class="marker">
+          <a class="self-link"
+               href="#example-14">Example<!---0.802764%-->
+          <bdi>
+            14<!---0.802764%-->
+          </bdi></a><!---0.802764%-->
+        </div><!---0.802764%-->
+        <pre class="">Example: The title of the movie is: 
+            <code aria-busy="false"
+     class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">speak</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">phoneme</span> <span class="hljs-attr">alphabet</span>=<span class=
+     "hljs-string">"ipa"</span> <span class="hljs-attr">ph</span>=<span class="hljs-string">"ˈlɑ ˈviːɾə ˈʔeɪ ˈbɛlə"</span>&gt;</span>
+            "La vita è bella"<span class="hljs-tag">&lt;/<span class="hljs-name">phoneme</span>&gt;</span> (Life is beautiful),
+            which is directed by 
+            <span class="hljs-tag">&lt;<span class="hljs-name">phoneme</span> <span class="hljs-attr">alphabet</span>=<span class="hljs-string">"ipa"</span> <span class="hljs-attr">ph</span>=<span class=
+"hljs-string">"ɹəˈbɛːɹɾoʊ bɛˈniːnji"</span>"&gt;</span> 
+            Roberto Benigni <span class="hljs-tag">&lt;/<span class="hljs-name">phoneme</span>&gt;</span>.<span class="hljs-tag">&lt;/<span class="hljs-name">speak</span>&gt;</span>
+            </code></pre><!---0.802764%-->
+      </div>
+    </section>
+    <section id="substitution">
+      <h3 id="x4-4-substitution"></h3>
+      <bdi class="secno">
+        4.4<!---0.802764%-->
+      </bdi>Substitution<a aria-label="Permalink for Section 4.4"
+               class="self-link"
+               href="#substitution"></a>
+      <p>Allow content authors to substitute a text string to be rendered by TTS instead of the actual text contained in an element.</p>
+      <h4 id="wai-aria">WAI-ARIA<a aria-label="Permalink for Section"
+         class="self-link"
+         href="#substitution"></a></h4>
+      <p>The <a href="https://www.w3.org/TR/wai-aria/#aria-label"><code>aria-label</code></a> and <a href="https://www.w3.org/TR/wai-aria/#aria-labelledby"><code>aria-labelledby</code></a> attribute can be used by an author to supply a text string
+      that will become the accessible name for the element upon which it is applied.&nbsp; This usage effectively provides a mechanism for performing text substation that is supported by a screen reader. However, it is problematic for one
+      significant reason; for users who utilize screen readers and refreshable Braille, the content that is voiced will not match the content that is sent to the refreshable Braille device. This mismatch would not be acceptable for some content,
+      particularly for assessment content.<br></p>
+      <h4 id="ssml-2">SSML<a aria-label="Permalink for Section"
+         class="self-link"
+         href="#substitution"></a></h4>
+      <p>Pronounce the specified word or phrase as a different word or phrase. Specify the pronunciation to substitute with the <code>alias</code> attribute.</p>
+      <div class="example"
+           id="example-15">
+        <div class="marker">
+          <a class="self-link"
+               href="#example-15">Example<!---0.802764%-->
+          <bdi>
+            15<!---0.802764%-->
+          </bdi></a><!---0.802764%-->
+        </div><!---0.802764%-->
+        <pre class=""><code aria-busy="false"
+     class="hljs xml">
+   <span class="hljs-tag">&lt;<span class="hljs-name">speak</span>&gt;</span>
+       My favorite chemical element is <span class="hljs-tag">&lt;<span class="hljs-name">sub</span> <span class="hljs-attr">alias</span>=<span class="hljs-string">"aluminum"</span>&gt;</span>Al<span class="hljs-tag">&lt;/<span class=
+"hljs-name">sub</span>&gt;</span>,
+       but Al prefers <span class="hljs-tag">&lt;<span class="hljs-name">sub</span> <span class="hljs-attr">alias</span>=<span class="hljs-string">"magnesium"</span>&gt;</span>Mg<span class="hljs-tag">&lt;/<span class=
+"hljs-name">sub</span>&gt;</span>. 
+ <span class="hljs-tag">&lt;/<span class="hljs-name">speak</span>&gt;</span>
+ </code></pre><!---0.802764%-->
+      </div>
+    </section>
+    <section id="rate-pitch-volume-0">
+      <h3 id="x4-5-rate-pitch-volume"></h3>
+      <bdi class="secno">
+        4.5<!---0.802764%-->
+      </bdi>Rate/Pitch/Volume<a aria-label="Permalink for Section 4.5"
+               class="self-link"
+               href="#rate-pitch-volume-0"></a>
+      <p>Allow content authors to specify characteristics, such as rate, pitch, and/or volume of the TTS rendering of the text.</p>
+      <h4 id="css-0">CSS<a aria-label="Permalink for Section"
+         class="self-link"
+         href="#rate-pitch-volume-0"></a></h4>
+      <dl>
+        <dt><strong>voice-rate</strong></dt>
+        <dd>The <code>‘voice-rate’</code> property manipulates the rate of generated synthetic speech in terms of words per minute.</dd>
+      </dl>
+      <dl>
+        <dt><strong>voice-pitch</strong></dt>
+        <dd>The <code>‘voice-pitch’</code> property specifies the "baseline" pitch of the generated speech output, which depends on the used <code>‘voice-family’</code> instance, and varies across speech synthesis processors (it approximately
+        corresponds to the average pitch of the output). For example, the common pitch for a male voice is around 120Hz, whereas it is around 210Hz for a female voice.</dd>
+      </dl>
+      <dl>
+        <dt><strong>voice-range</strong></dt>
+        <dd>The <code>‘voice-range’</code> property specifies the variability in the "baseline" pitch, i.e. how much the fundamental frequency may deviate from the average pitch of the speech output. The dynamic pitch range of the generated speech
+        generally increases for a highly animated voice, for example when variations in inflection are used to convey meaning and emphasis in speech. Typically, a low range produces a flat, monotonic voice, whereas a high range produces an animated
+        voice.</dd>
+      </dl>
+      <h4 id="ssml-3">SSML<a aria-label="Permalink for Section"
+         class="self-link"
+         href="#rate-pitch-volume-0"></a></h4>
+      <p><code>prosody</code> modifies the volume, pitch, and rate of the tagged speech.</p>
+      <div class="example"
+           id="example-16">
+        <div class="marker">
+          <a class="self-link"
+               href="#example-16">Example<!---0.802764%-->
+          <bdi>
+            16<!---0.802764%-->
+          </bdi></a><!---0.802764%-->
+        </div><!---0.802764%-->
+        <pre class=""><code aria-busy="false"
+     class="hljs xml">
+  <span class="hljs-tag">&lt;<span class="hljs-name">speak</span>&gt;</span>
+      Normal volume for the first sentence.
+      <span class="hljs-tag">&lt;<span class="hljs-name">prosody</span> <span class="hljs-attr">volume</span>=<span class="hljs-string">"x-loud"</span>&gt;</span>Louder volume for the second sentence<span class="hljs-tag">&lt;/<span class=
+"hljs-name">prosody</span>&gt;</span>.
+      When I wake up, <span class="hljs-tag">&lt;<span class="hljs-name">prosody</span> <span class="hljs-attr">rate</span>=<span class="hljs-string">"x-slow"</span>&gt;</span>I speak quite slowly<span class="hljs-tag">&lt;/<span class=
+"hljs-name">prosody</span>&gt;</span>.
+      I can speak with my normal pitch, 
+      <span class="hljs-tag">&lt;<span class="hljs-name">prosody</span> <span class="hljs-attr">pitch</span>=<span class="hljs-string">"x-high"</span>&gt;</span> but also with a much higher pitch <span class="hljs-tag">&lt;/<span class=
+"hljs-name">prosody</span>&gt;</span>, 
+      and also <span class="hljs-tag">&lt;<span class="hljs-name">prosody</span> <span class="hljs-attr">pitch</span>=<span class="hljs-string">"low"</span>&gt;</span>with a lower pitch<span class="hljs-tag">&lt;/<span class=
+"hljs-name">prosody</span>&gt;</span>.
+<span class="hljs-tag">&lt;/<span class="hljs-name">speak</span>&gt;</span>
+</code></pre><!---0.802764%-->
+      </div>
+    </section>
+    <section id="emphasis-0">
+      <h3 id="x4-6-emphasis"></h3>
+      <bdi class="secno">
+        4.6<!---0.802764%-->
+      </bdi>Emphasis<a aria-label="Permalink for Section 4.6"
+               class="self-link"
+               href="#emphasis-0"></a>
+      <p>Allow content authors to specify that text content be spoken with emphasis, for example, louder and more slowly. This can be viewed as a simplification of the Rate/Pitch/Volume controls to reduce authoring complexity.</p>
+      <h4 id="html-0">HTML<a aria-label="Permalink for Section"
+         class="self-link"
+         href="#emphasis-0"></a></h4>
+      <p>The HTML <code>&lt;em&gt;</code> element marks text that has stress emphasis. The <code>&lt;em&gt;</code> element can be nested, with each level of nesting indicating a greater degree of emphasis.</p>
+      <p>The <code>&lt;em&gt;</code> element is for words that have a stressed emphasis compared to surrounding text, which is often limited to a word or words of a sentence and affects the meaning of the sentence itself. Typically this element is
+      displayed in italic type. However, it should not be used simply to apply italic styling; use the CSS <code>font-style</code> property for that purpose. Use the <code>&lt;cite&gt;</code> element to mark the title of a work (book, play, song,
+      etc.). Use the <code>&lt;i&gt;</code> element to mark text that is in an alternate tone or mood, which covers many common situations for italics such as scientific names or words in other languages. Use the <code>&lt;strong&gt;</code> element
+      to mark text that has greater importance than surrounding text.</p>
+      <h4 id="css-1">CSS<a aria-label="Permalink for Section"
+         class="self-link"
+         href="#emphasis-0"></a></h4>
+      <dl>
+        <dt><strong>voice-stress</strong></dt>
+        <dd>The <code>‘voice-stress’</code> property manipulates the strength of emphasis, which is normally applied using a combination of pitch change, timing changes, loudness and other acoustic differences. The precise meaning of the values
+        therefore depend on the language being spoken.</dd>
+      </dl>
+      <h4 id="ssml-4">SSML<a aria-label="Permalink for Section"
+         class="self-link"
+         href="#emphasis-0"></a></h4>
+      <p>Emphasize the tagged words or phrases. Emphasis changes rate and volume of the speech. More emphasis is spoken louder and slower. Less emphasis is quieter and faster.</p>
+      <div class="example"
+           id="example-17">
+        <div class="marker">
+          <a class="self-link"
+               href="#example-17">Example<!---0.802764%-->
+          <bdi>
+            17<!---0.802764%-->
+          </bdi></a><!---0.802764%-->
+        </div><!---0.802764%-->
+        <pre class=""><code aria-busy="false"
+     class="hljs xml">
+        <span class="hljs-tag">&lt;<span class="hljs-name">speak</span>&gt;</span>
+        I already told you I 
+       <span class="hljs-tag">&lt;<span class="hljs-name">emphasis</span> <span class="hljs-attr">level</span>=<span class="hljs-string">"strong"</span>&gt;</span>really like<span class="hljs-tag">&lt;/<span class=
+"hljs-name">emphasis</span>&gt;</span> that person.
+       <span class="hljs-tag">&lt;/<span class="hljs-name">speak</span>&gt;</span> 
+</code></pre><!---0.802764%-->
+      </div>
+    </section>
+    <section id="say-as-0">
+      <h3 id="x4-7-say-as"></h3>
+      <bdi class="secno">
+        4.7<!---0.802764%-->
+      </bdi>Say As<a aria-label="Permalink for Section 4.7"
+               class="self-link"
+               href="#say-as-0"></a>
+      <p>Allow content authors to specify how text is spoken. For example, content authors would be able to indicate that a series of four numbers should be spoken as a year rather than a cardinal number.</p>
+      <h4 id="css-2">CSS<a aria-label="Permalink for Section"
+         class="self-link"
+         href="#say-as-0"></a></h4>
+      <p>The <code>‘speak-as’</code> property determines in what manner text gets rendered aurally, based upon a predefined list of possibilities.</p>
+      <div class="note"
+           id="issue-container-generatedID"
+           role="note">
+        <div aria-level="4"
+             class="note-title marker"
+             id="h-note"
+             role="heading">
+          <span>Note</span><!---0.802764%-->
+        </div>
+        <p class="">Speech synthesizers are knowledgeable about what a number is. The <code>‘speak-as’</code> property enables some level of control on how user agents render numbers, and may be implemented as a preprocessing step before passing the
+        text to the actual speech synthesizer.</p>
+      </div>
+      <h4 id="ssml-5">SSML<a aria-label="Permalink for Section"
+         class="self-link"
+         href="#say-as-0"></a></h4>
+      <p>Describes how the text should be interpreted. This lets you provide additional context to the text and eliminate any ambiguity on how Alexa should render the text. Indicate how Alexa should interpret the text with the
+      <code>interpret-as</code> attribute.</p>
+      <div class="example"
+           id="example-18">
+        <div class="marker">
+          <a class="self-link"
+               href="#example-18">Example<!---0.802764%-->
+          <bdi>
+            18<!---0.802764%-->
+          </bdi></a><!---0.802764%-->
+        </div><!---0.802764%-->
+        <pre class=""><code aria-busy="false"
+     class="hljs javascript">
+&lt;speak&gt;
+    Here is a number spoken <span class="hljs-keyword">as</span> a cardinal number: 
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">say-as</span> <span class="hljs-attr">interpret-as</span>=<span class="hljs-string">"cardinal"</span>&gt;</span>12345<span class="hljs-tag">&lt;/<span class=
+"hljs-name">say-as</span>&gt;</span></span>.
+    Here is the same number <span class="hljs-keyword">with</span> each digit spoken separately:
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">say-as</span> <span class="hljs-attr">interpret-as</span>=<span class="hljs-string">"digits"</span>&gt;</span>12345<span class="hljs-tag">&lt;/<span class=
+"hljs-name">say-as</span>&gt;</span></span>.
+    Here is a word spelled out: <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">say-as</span> <span class="hljs-attr">interpret-as</span>=<span class="hljs-string">"spell-out"</span>&gt;</span>hello<span class=
+"hljs-tag">&lt;/<span class="hljs-name">say-as</span>&gt;</span></span>
+&lt;/speak&gt;
+</code></pre><!---0.802764%-->
+      </div>
+    </section>
+    <section id="pausing-0">
+      <h3 id="x4-8-pausing"></h3>
+      <bdi class="secno">
+        4.8<!---0.802764%-->
+      </bdi>Pausing<a aria-label="Permalink for Section 4.8"
+               class="self-link"
+               href="#pausing-0"></a>
+      <p>Allow content authors to specify pauses before or after content to ensure the desired prosody of the presentation, which can affect the pronunciation of the pronunciation of content the precedes or follows the pause.</p>
+      <h4 id="css-3">CSS<a aria-label="Permalink for Section"
+         class="self-link"
+         href="#pausing-0"></a></h4>
+      <p>The <code>‘pause-before’</code> and <code>‘pause-after’</code> properties specify a prosodic boundary (silence with a specific duration) that occurs before (or after) the speech synthesis rendition of the selected element, or if any
+      <code>‘cue-before’</code> (or <code>‘cue-after’</code>) is specified, before (or after) the cue within the aural box model.</p>
+      <div class="note"
+           id="issue-container-generatedID-0"
+           role="note">
+        <div aria-level="4"
+             class="note-title marker"
+             id="h-note-0"
+             role="heading">
+          <span>Note</span><!---0.802764%-->
+        </div>
+        <p class="">Note that although the functionality provided by this property is similar to the <code>break element</code> from the SSML markup language [SSML], the application of ‘pause’ prosodic boundaries within the aural box model of CSS
+        Speech requires special considerations (e.g. "collapsed" pauses).</p>
+      </div>
+      <h4 id="ssml-6">SSML<a aria-label="Permalink for Section"
+         class="self-link"
+         href="#pausing-0"></a></h4>
+      <p><code>break</code> represents a pause in the speech. Set the length of the pause with the <code>strength</code> or <code>time</code> attributes.</p>
+      <div class="example"
+           id="example-19">
+        <div class="marker">
+          <a class="self-link"
+               href="#example-19">Example<!---0.802764%-->
+          <bdi>
+            19<!---0.802764%-->
+          </bdi></a><!---0.802764%-->
+        </div><!---0.802764%-->
+        <pre class=""><code aria-busy="false"
+     class="hljs xml">
+<span class="hljs-tag">&lt;<span class="hljs-name">speak</span>&gt;</span>
+    There is a three second pause here <span class="hljs-tag">&lt;<span class="hljs-name">break</span> <span class="hljs-attr">time</span>=<span class="hljs-string">"3s"</span>/&gt;</span> 
+    then the speech continues.
+<span class="hljs-tag">&lt;/<span class="hljs-name">speak</span>&gt;</span> 
+</code></pre><!---0.802764%-->
+      </div>
+    </section>
+  </section>
+</body>
+</html>
